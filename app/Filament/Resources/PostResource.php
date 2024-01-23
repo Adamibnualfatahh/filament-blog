@@ -2,10 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\PostExporter;
+use App\Filament\Imports\PostImporter;
 use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Category;
 use App\Models\Post;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
@@ -16,6 +19,8 @@ use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -101,7 +106,14 @@ class PostResource extends Resource
                     ->counts(['comments'])
                     ->sortable()
                     ->badge(),
+            ])->headerActions([
+                ImportAction::make()
+                    ->importer(PostImporter::class),
+                ExportAction::make()
+                    ->exporter(PostExporter::class)
+                    ->formats([ExportFormat::Xlsx])
             ])
+
             ->filters([
                 //
             ])
